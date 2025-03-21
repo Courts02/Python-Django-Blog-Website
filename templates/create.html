@@ -29,7 +29,7 @@
     }
 
     h3 {
-      color: rgb(237, 63, 63);
+      color: rgb(53, 156, 127);
       font-weight: 500;
       font-size: 30px;
       margin-bottom: 20px;
@@ -37,7 +37,7 @@
 
     .btn {
       margin-top: 30px;
-      background: rgb(236, 88, 88);
+      background: rgb(48, 143, 83);
       width: 100%;
       color: #fff;
       font-size: 20px;
@@ -46,8 +46,8 @@
 
     .btn:hover {
       background: transparent;
-      color: rgb(237, 63, 63);
-      border: 1px solid rgb(237, 63, 63);
+      color: rgb(58, 209, 159);
+      border: 1px solid rgb(63, 237, 164);
     }
 
     a {
@@ -56,7 +56,7 @@
     }
 
     a:hover {
-      color: rgb(237, 63, 63);
+      color: rgb(63, 237, 159);
       letter-spacing: 1px;
     }
 
@@ -75,12 +75,30 @@
     <nav class="navbar navbar-expand-lg bg-white">
       <div class="container">
         <a class="navbar-brand" href="{% url 'index' %}">
-          <h2>BLOG<span style="color: orangered;">SPOT</span></h2>
+          <h2>BLOG<span style="color: rgb(96, 210, 144);">SPOT</span></h2>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
           aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+        <style>
+          .navbar-toggler {
+            background-color: #00ba70; /* Set a custom background color */
+            border: 2px solid #00733f; /* Add a border (optional) */
+            border-radius: 5px; /* Make corners slightly rounded */
+            padding: 10px; /* Adjust padding for a better look */
+            cursor: pointer; /* Change cursor to pointer on hover */
+          }
+        
+          .navbar-toggler:hover {
+            background-color: #05a072; /* Set a different color for hover effect */
+            border-color: #004d28; /* Change border color when hovering */
+          }
+        
+          .navbar-toggler-icon {
+            color: white; /* Ensure the icon contrasts well with the background */
+          }
+        </style>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li>

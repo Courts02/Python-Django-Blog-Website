@@ -65,8 +65,8 @@
         }
 
         .bg-c-lite-green {
-            background: linear-gradient(to top, #4b35d9, #eb31a7);
-            box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+            background: linear-gradient(to top, #1cd186, #9860e7);
+            box-shadow: 0 1px 20px 0 rgba(71, 86, 80, 0.08);
         }
 
         .user-profile {
@@ -127,7 +127,7 @@
         }
 
         .text-muted {
-            color: #919aa3 !important;
+            color: #080808 !important;
         }
 
         .b-b-default {
@@ -190,12 +190,23 @@
         <nav class="navbar navbar-expand-lg bg-white">
             <div class="container">
                 <a class="navbar-brand" href="index.html">
-                    <h2>BLOG<span style="color: orangered;">SPOT</span></h2>
+                    <h2>BLOG<span style="color: rgb(96, 210, 144);">SPOT</span></h2>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                     aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <style>
+                    .navbar-toggler {
+                      background-color: #33ff92; /* Set your desired background color */
+                      color: #fff; /* Optional: set the text color */
+                      border: none; /* Optional: remove the border if needed */
+                    }
+                  
+                    .navbar-toggler:hover {
+                      background-color: #3ce789; /* Optional: set a hover color */
+                    }
+                  </style>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
                         <li>
@@ -287,10 +298,10 @@
                                                     <h5>{{post.postname}}</h5>
                                                     <a href="{% url 'deletepost' post.id %}"><button
                                                             class="ms-2 float-right small" type="submit"
-                                                            style="border:2px solid rgb(252, 63, 42); border-radius: 5px; background-color: rgb(246, 148, 141);">Delete</button></a>
+                                                            style="border:2px solid rgb(243, 0, 0); border-radius: 5px; background-color: rgb(176, 64, 64);">Delete</button></a>
                                                     <a href="{% url 'editpost' post.id %}"><button
                                                             class="float-right small" type="submit"
-                                                            style="border:2px solid rgb(64, 108, 251); border-radius: 5px; background-color: rgb(141, 169, 246);">Edit</button></a>
+                                                            style="border:2px solid rgb(8, 239, 58); border-radius: 5px; background-color: rgb(63, 154, 102);">Edit</button></a>
                                                     <span
                                                         class="text-white bg-success rounded-3 px-2 rounded-2">{{post.category}}</span>
                                                     <p>{{post.content|slice:"0:20"}}...</p>

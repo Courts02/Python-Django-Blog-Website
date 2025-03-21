@@ -13,12 +13,31 @@
   <nav class="navbar navbar-expand-lg bg-white">
     <div class="container">
       <a class="navbar-brand" href="{% url 'index' %}">
-        <h2>Blog<span style="color: rgb(241, 110, 70);">Spot</span></h2>
+        <h2>Blog<span style="color: rgb(70, 241, 147);">Spot</span></h2>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
         aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+      <style>
+        .navbar-toggler {
+          background-color: #098d68; /* Default background color */
+          border: none; /* Remove the border if desired */
+          border-radius: 4px; /* Add a subtle curve to the corners */
+          padding: 8px 12px; /* Adjust padding for better sizing */
+          cursor: pointer; /* Ensure a pointer cursor on hover */
+        }
+      
+        .navbar-toggler:hover {
+          background-color: #108655; /* Slightly darker color for hover effect */
+        }
+      
+        .navbar-toggler-icon {
+          width: 20px; /* Adjust icon size */
+          height: 20px;
+          background-color: white; /* Set icon color */
+        }
+      </style>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li>

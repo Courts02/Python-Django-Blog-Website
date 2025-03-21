@@ -45,6 +45,27 @@
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3"
           aria-label="Slide 4"></button>
       </div>
+      <style>
+        .carousel-indicators button {
+          background-color: #6c757d; /* Default color for all indicators */
+          border: none; /* Remove borders */
+          width: 12px; /* Adjust size */
+          height: 12px;
+          border-radius: 50%; /* Make them circular */
+          margin: 5px; /* Add spacing between indicators */
+          opacity: 0.7; /* Make them slightly transparent */
+        }
+      
+        .carousel-indicators button.active {
+          background-color: #00ff77; /* Distinct color for the active indicator */
+          opacity: 1; /* Fully opaque for active indicator */
+        }
+      
+        .carousel-indicators button:hover {
+          background-color: #17b878; /* Hover effect for all indicators */
+          opacity: 0.9; /* Slightly less transparent on hover */
+        }
+      </style>
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img src="{% static 'assets/images/img1.jpg' %}" alt="image1">
@@ -115,7 +136,7 @@
 
   <section class="blog-posts">
     <div class="container">
-      <h3 class="text-center" style="margin: 50px; font-size: 40px; color: rgb(231, 92, 92);">RECENT POSTS</h3>
+      <h3 class="text-center" style="margin: 50px; font-size: 40px; color: rgb(75, 201, 132);">RECENT POSTS</h3>
       <div class="row">
         <div class="col-lg-12">
           <div class="all-blog-posts">
