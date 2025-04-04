@@ -3,6 +3,7 @@
 <html lang="en">
 
 <head>
+  <script src="https://unpkg.com/htmx.org@1.9.4"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -12,7 +13,7 @@
     rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-  <title>Create Blog</title>
+  <title>Create Blog</title> 
 
   <!-- Bootstrap core CSS -->
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -83,20 +84,28 @@
         </button>
         <style>
           .navbar-toggler {
-            background-color: #00ba70; /* Set a custom background color */
-            border: 2px solid #00733f; /* Add a border (optional) */
-            border-radius: 5px; /* Make corners slightly rounded */
-            padding: 10px; /* Adjust padding for a better look */
-            cursor: pointer; /* Change cursor to pointer on hover */
+            background-color: #00ba70;
+            /* Set a custom background color */
+            border: 2px solid #00733f;
+            /* Add a border (optional) */
+            border-radius: 5px;
+            /* Make corners slightly rounded */
+            padding: 10px;
+            /* Adjust padding for a better look */
+            cursor: pointer;
+            /* Change cursor to pointer on hover */
           }
-        
+
           .navbar-toggler:hover {
-            background-color: #05a072; /* Set a different color for hover effect */
-            border-color: #004d28; /* Change border color when hovering */
+            background-color: #05a072;
+            /* Set a different color for hover effect */
+            border-color: #004d28;
+            /* Change border color when hovering */
           }
-        
+
           .navbar-toggler-icon {
-            color: white; /* Ensure the icon contrasts well with the background */
+            color: white;
+            /* Ensure the icon contrasts well with the background */
           }
         </style>
         <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -112,7 +121,7 @@
 
             {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'create' %}">Create</a>
+              <a class="nav-link" href="{% url 'create_post' %}">Create</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'profile' user.id %}">Profile</a>
@@ -136,25 +145,32 @@
   <div class="container">
     <div class="d-flex justify-content-center align-items-center " style="height: 100vh;">
 
-      <form action="{% url 'create' %}" class="p-5 shadow" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <h3 class="mt-4 mb-4">Create Blog</h3>
-        <label for="" class="form-label">Title</label>
-        <div class="input-group">
-          <input type="text" class="form-control" name="postname" required>
-        </div>
-        <label for="" class="form-label">Content</label>
-        <textarea class="form-control" name="content" required></textarea>
-        <label for="" class="form-label">Category</label>
-        <input type="text" class="form-control" name="category" required>
-        <label for="" class="form-label">Upload Image</label>
-        <input type="file" class="form-control" name="image">
-        <button class="btn">Create Blog</button>
-        <br>
-        {% for message in messages %}
-        <p class="text-danger">{{message}}</p>
-        {% endfor %}
-      </form>
+      <form hx-post="{% url 'create_post' %}" 
+      -encoding="multipart/form-data" 
+      hx-thxarget="#post-list" 
+      hx-swap="beforeend"
+      class="p-5 shadow"
+      method="post"
+      enctype="multipart/form-data">
+    {% csrf_token %}
+    <h3 class="mt-4 mb-4">Create Blog</h3>
+    <label for="" class="form-label">Title</label>
+    <div class="input-group">
+        <input type="text" class="form-control" name="postname" required>
+    </div>
+    <label for="" class="form-label">Content</label>
+    <textarea class="form-control" name="content" required></textarea>
+    <label for="" class="form-label">Category</label>
+    <input type="text" class="form-control" name="category" required>
+    <label for="" class="form-label">Upload Image</label>
+    <input type="file" class="form-control" name="image">
+    <button class="btn">Create Blog</button>
+    <br>
+    {% for message in messages %}
+        <p class="text-danger">{{ message }}</p>
+    {% endfor %}
+</form>
+  
 
     </div>
   </div>

@@ -1,11 +1,14 @@
-from django.shortcuts import render, redirect  # Import functions for rendering templates and redirecting
+from django.shortcuts import render, redirect, get_object_or_404  # Import functions for rendering templates and redirecting
 from django.contrib.auth.models import User, auth  # Import Django's authentication system
 from django.contrib.auth import authenticate  # Import authenticate function for user authentication
 from django.contrib import messages  # Import messages to display notifications
 from django.contrib.auth.decorators import login_required  # Import decorator for login-required views
 from django.conf import settings  # Import settings to use media URLs
 from .models import *  # Import all models from the current app
-
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+import logging
 from .models import Comment, Post  # Explicitly import Comment and Post models
 
 # View for the homepage
@@ -73,31 +76,116 @@ def blog(request):
         'media_url': settings.MEDIA_URL
     })
 
-# Create a new blog post
-def create(request):
-    if request.method == 'POST':
+# @login_required  # Ensure only logged-in users can create posts
+# def create_post(request):
+#     if request.method == "POST":
+#         try:
+#             # Directly get the form data
+#             data = request.POST
+#             image = request.FILES.get("image")
+
+#             # Create the new post directly without checking individual fields manually
+#             post = Post.objects.create(
+#                 postname=data.get("postname", "").strip(),
+#                 content=data.get("content", "").strip(),
+#                 category=data.get("category", "").strip(),
+#                 image=image,
+#                 user=request.user
+#             )
+
+#             # HTMX request handling (if applicable)
+#             if request.headers.get("HX-Request"):
+#                 return render(request, "post.html", {"post": post})
+
+#             # Default response for non-HTMX requests
+#             return JsonResponse({"success": True, "message": "Post created successfully!"})
+
+#         except Exception as e:
+#             # General error response
+#             return JsonResponse({"success": False, "error": str(e)}, status=400)
+
+#     # If the method isn't POST, return an error
+#     return JsonResponse({"success": False, "error": "Invalid request method"}, status=405)
+
+# logger = logging.getLogger(__name__)
+
+# @login_required  # Ensure only logged-in users can create posts
+# def create_post(request):
+#     logger.info(f"Request method: {request.method}")  # Log the request method
+    
+#     if request.method == "POST":
+#         try:
+#             logger.info("Processing POST request")  # Log that we are processing a POST request
+            
+#             # Get the form data and file
+#             data = request.POST
+#             image = request.FILES.get("image")
+            
+#             # Check that all necessary fields are present
+#             postname = data.get("postname", "").strip()
+#             content = data.get("content", "").strip()
+            
+#             if not postname or not content:
+#                 logger.warning("Postname or content missing")
+#                 return JsonResponse({"success": False, "error": "Postname and content are required."}, status=400)
+            
+#             # Create the new post
+#             post = Post.objects.create(
+#                 postname=postname,
+#                 content=content,
+#                 category=data.get("category", "").strip(),
+#                 image=image,
+#                 user=request.user
+#             )
+            
+#             # HTMX request handling (if applicable)
+#             if request.headers.get("HX-Request"):
+#                 return render(request, "post.html", {"post": post})
+
+#             # Default response for non-HTMX requests
+#             return JsonResponse({"success": True, "message": "Post created successfully!"})
+
+#         except Exception as e:
+#             # General error response
+#             logger.error(f"Error creating post: {e}")
+#             return JsonResponse({"success": False, "error": str(e)}, status=400)
+
+#     # If the method isn't POST, return an error
+#     logger.warning(f"Invalid request method: {request.method}")
+#     return JsonResponse({"success": False, "error": "Invalid request method"}, status=405)
+   
+
+def create_post(request):
+    if request.method == "POST":
         try:
-            postname = request.POST['postname']
-            content = request.POST['content']
-            category = request.POST['category']
-            image = request.FILES['image']  # Get uploaded image
+            # Get data from the form
+            data = request.POST
+            image = request.FILES.get("image")
+            postname = request.POST.get("postname")
+            content = request.POST.get("content")
+            category = request.POST.get("category")
 
-            # Save new post
-            Post(postname=postname, content=content, category=category, image=image, user=request.user).save()
-        except:
-            print("Error")  # Print error if something goes wrong
+            # Create a new post object and save it to the database
+            post = Post.objects.create(
+                postname=data.get("postname", "").strip(),
+                content=data.get("content", "").strip(),
+                category=data.get("category", "").strip(),
+                image=image, # Handle optional image upload
+                user=request.user # Associate post with the logged-in user
+            )
 
-        return redirect('index')  # Redirect to homepage
-    else:
-        return render(request, "create.html")  # Render create post page
+            # return JsonResponse({"success": True, "message": "Post created successfully!"})
 
-# User profile view
-def profile(request, id):
-    return render(request, 'profile.html', {
-        'user': User.objects.get(id=id),  # Fetch user by ID
-        'posts': Post.objects.all(),  # Fetch all posts
-        'media_url': settings.MEDIA_URL,
-    })
+        except Exception as e:
+            # Handle errors and return an appropriate response
+            return JsonResponse({"success": False, "error": str(e)}, status=400)
+
+    # If it's a GET request, render the form template
+    return render(request, "form.html")
+
+
+
+
 
 # Edit user profile
 def profileedit(request, id):
@@ -125,18 +213,20 @@ def increaselikes(request, id):
         post.save()
     return redirect("index")  # Redirect to homepage
 
-# View a single post
 def post(request, id):
-    post = Post.objects.get(id=id)
+    post = get_object_or_404(Post, id=id)
+    comments = Comment.objects.filter(post_id=post.id)  # Fetch all comments
 
-    return render(request, "post-details.html", {
+    context = {
         "user": request.user,
-        'post': post,
-        'recent_posts': Post.objects.all().order_by("-id"),  # Fetch recent posts
-        'media_url': settings.MEDIA_URL,
-        'comments': Comment.objects.filter(post_id=post.id),  # Fetch comments for the post
-        'total_comments': len(Comment.objects.filter(post_id=post.id))  # Count comments
-    })
+        "post": post,
+        "recent_posts": Post.objects.all().order_by("-id"),  # Fetch recent posts
+        "media_url": settings.MEDIA_URL,
+        "comments": comments,
+        "total_comments": comments.count()  # Count comments efficiently
+    }
+
+    return render(request, "post_detail.html", context)
 
 # Save a comment on a post
 def savecomment(request, id):
@@ -194,3 +284,11 @@ def contact_us(request):
         context['message'] = f"Dear {name}, Thanks for your time!"  # Display success message
 
     return render(request, "contact.html")
+
+def post_list(request):
+    posts = Post.objects.all().order_by("-id")
+    return render(request, "partials/post_list.html", {"posts": posts})
+
+def profile(request, id):
+    user = get_object_or_404(User, id=id)
+    return render(request, "profile.html", {"user": user})

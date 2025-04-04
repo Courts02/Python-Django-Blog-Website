@@ -1,0 +1,17 @@
+{% load static %}
+<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'assets/css/fontawesome.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/templatemo-stand-blog.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+
+<script src="https://unpkg.com/htmx.org@1.7.0"></script>
+<div class="post">
+    <h3>{{ post.postname }}</h3>
+    <p>{{ post.content }}</p>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="Post image" />
+    {% endif %}
+    <p><small>Posted by {{ post.user.username }}</small></p>
+</div>
+

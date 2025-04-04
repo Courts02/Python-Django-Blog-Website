@@ -1,0 +1,8 @@
+{% for post in posts %}
+    <div>
+        <h3>{{ post.postname }}</h3>
+        <p>{{ post.content }}</p>
+        <button hx-delete="{% url 'delete_post' post.id %}" hx-target="#post-list" hx-swap="outerHTML">Delete</button>
+    </div>
+{% endfor %}
+<script src="https://unpkg.com/htmx.org@1.7.0"></script>
